@@ -1,0 +1,140 @@
+:root {
+    --primary: #7C3AED;
+    /* Purple */
+    --primary-hover: #6D28D9;
+    --accent: #EC4899;
+    /* Pink */
+    --text-dark: #111827;
+    --text-muted: #6B7280;
+    --bg-light: #F9FAFB;
+    --white: #FFFFFF;
+    --success: #16A34A;
+    --primary-border: #beaadf;
+}
+
+
+.logo .shopping {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.4rem;
+}
+
+@media (max-width: 576px) {
+
+    .search-bar {
+        height: 29px;
+        font-size: 13px;
+    }
+
+    .search-btn {
+        padding: 2px 6px !important;
+    }
+
+    .navbar-brand .shopping,
+    .navbar-brand .kart {
+        font-size: 10px !important;
+    }
+}
+
+/* ================================
+   NAVBAR
+================================ */
+.navbar {
+    background-color: var(--white) !important;
+}
+
+.navbar a {
+    color: var(--text-dark);
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    color: var(--primary);
+}
+
+/* ================================
+   GLOBAL BUTTON SYSTEM
+   (MOST IMPORTANT PART)
+================================ */
+.btn-colors {
+    background-color: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+}
+
+.btn-colors:hover {
+    background-color: var(--primary-hover);
+    color: #fff;
+}
+
+/* secondary / dropdown buttons if needed */
+.dropdown-btn {
+    background-color: var(--accent);
+    color: #fff;
+}
+
+.dropdown-btn:hover {
+    background-color: #DB2777;
+}
+
+/* ================================
+   FORM INPUTS
+================================ */
+.form-control {
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+}
+
+.form-control:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 0.15rem rgba(124, 58, 237, 0.25);
+}
+
+/* ================================
+   BADGES (CART, PRICE, STOCK)
+================================ */
+.badge {
+    font-size: 0.7rem;
+}
+
+.badge.bg-danger {
+    background-color: var(--accent) !important;
+}
+
+/* Stock badge example */
+.badge-stock {
+    background-color: var(--success);
+    color: #fff;
+    font-size: 0.75rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+/* ================================
+   PRODUCT IMAGES (VERY IMPORTANT)
+================================ */
+.product-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/* ================================
+   DROPDOWN
+================================ */
+.dropdown-menu {
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+
+}
+
+.dropdown-item:hover {
+    background-color: rgba(124, 58, 237, 0.08);
+    color: var(--primary);
+
+}

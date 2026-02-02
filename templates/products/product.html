@@ -1,0 +1,290 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .shop-layout {
+        display: grid;
+        grid-template-columns: 260px 1fr;
+        gap: 24px;
+    }
+
+    .sidebar {
+        background: #fff;
+        border-radius: 12px;
+        padding: 18px;
+        border: 1px solid var(--primary-border);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+        height: fit-content;
+    }
+
+    .clear-filter {
+        background-color: var(--primary);
+        color: white !important;
+    }
+
+    .clear-filter:hover {
+        background-color: var(--primary-hover);
+    }
+
+    .filter-box {
+        margin-bottom: 22px;
+    }
+
+    .filter-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        border-bottom: 1px solid #eee;
+        padding-bottom: 6px;
+        margin-bottom: 12px;
+    }
+
+    .category-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .category-list li {
+        margin-bottom: 8px;
+    }
+
+    .category-list a {
+        display: block;
+        padding: 6px 10px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        text-decoration: none;
+        color: #444;
+    }
+
+    .category-list a:hover {
+        background: #f2f2f2;
+        color: var(--primary);
+    }
+
+    .sidebar input {
+        width: 100%;
+        padding: 7px;
+        margin-bottom: 8px;
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        font-size: 0.85rem;
+    }
+
+    .filter-btn {
+        width: 100%;
+        padding: 8px;
+        background: var(--primary);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .filter-btn:hover {
+        background-color: var(--primary-hover);
+    }
+
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 18px;
+    }
+
+    .product-card {
+        background: #fff;
+        border-radius: 18px;
+        border: 1px solid var(--primary-border);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .product-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: contain;
+        padding: 16px;
+    }
+
+    .product-body {
+        padding: 0 16px 16px;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .product-category {
+        font-size: 0.75rem;
+        color: #888;
+    }
+
+    .product-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin: 6px 0;
+    }
+
+    .price {
+        font-weight: 600;
+        color: var(--accent);
+    }
+
+    .product-desc {
+        font-size: 0.8rem;
+        color: #777;
+        margin: 6px 0;
+        flex-grow: 1;
+    }
+
+    .btn-atc {
+        margin-top: auto;
+        background: var(--primary) !important;
+        color: #fff !important;
+        border-radius: 5px;
+    }
+
+    .btn-atc:hover {
+        background: var(--primary-hover) !important;
+    }
+
+    .rating {
+        color: #777;
+        padding: 5px 8px;
+
+    }
+
+
+    @media (max-width: 991px) {
+        .shop-layout {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .product-card img {
+            height: 150px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .product-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .pd-url:hover {
+        text-decoration: none;
+
+    }
+
+    .all-product {
+        color: black;
+    }
+
+    .all-product:hover {
+        text-decoration: none;
+        color: black;
+
+
+    }
+</style>
+
+
+<div class="container mt-5">
+
+    <h2 class="mb-4">
+        <a class="all-product text-decoration-none" href="{% url 'product' %}">All Products </a>
+    </h2>
+
+
+    <div class="shop-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+
+            <div class="filter-box">
+                <div class="d-flex filter-title align-items-center justify-content-between">
+                    <h6 class="mt-2">Categories</h6>
+                    <a class="btn btn-sm clear-filter" href="{% url 'product' %}">Clear Filter</a>
+                </div>
+                <ul class="category-list">
+                    {% for cat in category %}
+                    <li>
+                        <a href="{% url 'product' %}?category={{ cat.pk }}"
+                            class="{% if selected_category == cat.pk %}text-primary font-weight-bold{% endif %}">
+                            {{ cat.category_name }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="filter-box">
+                <h6 class="filter-title">Price Range</h6>
+                <form method="get" action="{% url 'product' %}"> <input type="number" name="min_price"
+                        placeholder="Min ₹" value="{{ min_price }}">
+                    <input type="number" name="max_price" placeholder="Max ₹" value="{{ max_price }}">
+                    <select name="rating" class="my-2 rating">
+                        <option value="">All Ratings</option>
+                        <option value="5" {% if rating == "5" %}selected{% endif %}>5 ⭐</option>
+                        <option value="4" {% if rating == "4" %}selected{% endif %}>4 ⭐ & up</option>
+                        <option value="3" {% if rating == "3" %}selected{% endif %}>3 ⭐ & up</option>
+                    </select>
+                    <button class="filter-btn" type="submit">Apply</button>
+                </form>
+            </div>
+
+            <!-- <div class="filter-box">
+                <h6 class="filter-title">Availability</h6>
+                <label><input type="checkbox" type="in_stock"> In Stock</label>
+                <label><input type="checkbox" name="out_of_stock"> Out of Stock</label>
+            </div> -->
+
+        </aside>
+
+        <!-- PRODUCTS -->
+        <main>
+            <div class="product-grid">
+                {% for pro in products %}
+                <div class="product-card">
+                    <a href="{% url 'product_details_page' pro.slug %}" class="pd-url text-dark text-decoration-none">
+                        <img src="{{ pro.image.url }}" alt="{{ pro.product_name }}">
+                    </a>
+                    <div class="product-body">
+                        <small class="text-muted text-uppercase">{{ pro.category.category_name }}</small>
+                        <a href="{% url 'product_details_page' pro.slug %}"
+                            class="pd-url text-dark text-decoration-none">
+                            <h6 class="product-title mb-1">{{ pro.product_name }}</h6>
+                        </a>
+
+                        <div class="">
+                            <span class="price">₹{{ pro.min_price }}</span>
+                        </div>
+                        {% if pro.avg_rating %}
+                        <span class="ms-2 text-warning small">
+                            ★ {{ pro.avg_rating|floatformat:1 }}
+                        </span>
+                        {% endif %}
+
+                        <p class="product-desc">{{ pro.description|truncatechars:50 }}</p>
+
+                        <a href="{% url 'product_details_page' pro.slug %}" class="btn btn-atc btn-sm w-100 mt-2">View
+                            Options</a>
+                    </div>
+
+                </div>
+                {% empty %}
+                <p>No products found matching your filters.</p>
+                {% endfor %}
+            </div>
+        </main>
+
+    </div>
+</div>
+
+{% endblock %}

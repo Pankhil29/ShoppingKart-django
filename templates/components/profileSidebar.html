@@ -1,0 +1,46 @@
+<style>
+    .nav-link {
+        color: var(--text-dark);
+        border-radius: 8px;
+        padding: 10px 14px;
+    }
+
+    .nav-link.active,
+    .nav-link:hover {
+        background: var(--primary);
+        color: var(--white);
+    }
+
+    .sidebar {
+        background: var(--white);
+        border-right: 1px solid var(--primary-border);
+    }
+</style>
+
+<div class="col-lg-3 col-md-4 sidebar p-4">
+    <div class="text-center">
+
+        <h5 class="mb-1">{{ user.username }}</h5>
+        <!-- <small class="text-muted">Premium User</small> -->
+    </div>
+
+    <hr>
+
+    <ul class="nav flex-column gap-2">
+        <li class="nav-item">
+            <a class="nav-link {% if '/user_profile/' in request.path %}active{% endif %}"
+                href="{% url 'user_profile' %}">Profile</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if '/view_orders/' in request.path %}active{% endif %}"
+                href="{% url 'view_orders' %}">My Orders</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if '/wishlist_view/' in request.path %}active{% endif %}"
+                href="{% url 'wishlist_view' %}">Wishlist</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+        </li>
+    </ul>
+</div>

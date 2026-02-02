@@ -1,0 +1,190 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    .signup-container {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        /* background: linear-gradient(135deg, #f3e8ff 0%, #ffffff 100%); */
+        font-family: 'Poppins', sans-serif;
+    }
+
+    .signup-form {
+        background: #fff;
+        padding: 40px 30px;
+        border-radius: 20px;
+        box-shadow: 0 12px 28px rgba(124, 58, 237, 0.25);
+        max-width: 380px;
+        width: 100%;
+        text-align: center;
+        position: relative;
+    }
+
+    .signup-form h2 {
+        color: #7C3AED;
+        margin-bottom: 8px;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .signup-form .sub-title {
+        color: #555;
+        font-size: 0.95rem;
+        margin-bottom: 25px;
+    }
+
+    /* ===== Input Group ===== */
+    .input-group {
+        position: relative;
+        /* thoda extra margin for error */
+    }
+
+    .input-group input {
+        width: 100%;
+        padding: 14px 12px;
+        border-radius: 12px !important;
+        border: 1.5px solid #ddd;
+        background: transparent;
+        font-size: 0.95rem;
+        outline: none;
+        transition: all 0.3s ease;
+        min-height: 44px;
+        box-sizing: border-box;
+    }
+
+    .input-group input:focus {
+        border-color: #7C3AED;
+        box-shadow: 0 0 8px rgba(124, 58, 237, 0.3);
+    }
+
+    .input-group label {
+        display: flex;
+        justify-content: flex-start;
+        position: absolute;
+        top: 50%;
+        left: 14px;
+        transform: translateY(-50%);
+        background: #fff;
+        padding: 0 6px;
+        color: #888;
+        font-size: 0.9rem;
+        pointer-events: none;
+        transition: 0.3s ease;
+        z-index: 10;
+    }
+
+    .input-group input:focus+label,
+    .input-group input:not(:placeholder-shown)+label {
+        top: 0px;
+        font-size: 0.78rem;
+        color: #7C3AED;
+    }
+
+    /* Error below input */
+    .form-error {
+        position: relative;
+        margin-top: 4px;
+        font-size: 0.78rem;
+        color: #e74c3c;
+        text-align: left;
+        padding-left: 7px;
+    }
+
+    /* Button */
+    .signup-form button {
+        width: 100%;
+        padding: 14px;
+        border-radius: 12px;
+        border: none;
+        background: linear-gradient(90deg, #7C3AED 0%, #9333ea 100%);
+        color: #fff;
+        font-weight: 600;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    .signup-form button:hover {
+        background: linear-gradient(90deg, #5b1fa5 0%, #7C3AED 100%);
+        transform: translateY(-2px);
+    }
+
+    .signup-form .login-link {
+        margin-top: 18px;
+        font-size: 0.85rem;
+        color: #555;
+    }
+
+    .signup-form .login-link a {
+        color: #7C3AED;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+    .signup-form .login-link a:hover {
+        text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+        .signup-form {
+            padding: 30px 20px;
+            border-radius: 16px;
+        }
+
+        .signup-form h2 {
+            font-size: 1.6rem;
+        }
+
+        .signup-form .sub-title {
+            font-size: 0.85rem;
+        }
+
+        .input-group input {
+            font-size: 0.9rem;
+            min-height: 42px;
+        }
+
+        .input-group label {
+            font-size: 0.8rem;
+        }
+
+        .signup-form button {
+            font-size: 0.95rem;
+            padding: 12px;
+        }
+    }
+</style>
+
+
+<body>
+
+    <div class="signup-container">
+        <div class="signup-form">
+            <h2>Create Account</h2>
+            <p class="sub-title">Join our community and start shopping!</p>
+            <form method="POST">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-3">
+                    <div class="input-group my-0">
+                        {{ field }}
+                        <label>{{ field.label }}</label>
+                    </div>
+                    {% for error in field.errors %}
+                    <div class="text-danger text-start small form-error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+
+                <button type="submit">Signup</button>
+            </form>
+            <p class="login-link">Already have an account? <a href="{% url 'login' %}">Login</a></p>
+        </div>
+    </div>
+
+
+    {% endblock %}

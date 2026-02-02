@@ -1,0 +1,230 @@
+{% load static %}
+{% block extra_css %}
+<!-- <link href="{% static 'css/home.css' %}" rel="stylesheet"> -->
+<style>
+    .logo .shopping {
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 1.4rem;
+    }
+
+    .navbar {
+        background-color: var(--white) !important;
+    }
+
+    .navbar a {
+        color: var(--text-dark);
+        text-decoration: none;
+    }
+
+    .navbar a:hover {
+        color: var(--primary);
+    }
+
+    .btn-colors {
+        background-color: var(--primary);
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        font-weight: 500;
+        /* transition: all 0.2s ease-in-out; */
+    }
+
+    .btn-colors:hover {
+        background-color: var(--primary-hover);
+        color: #fff;
+
+    }
+
+    .dropdown-menu {
+        border-radius: 8px;
+        border: none;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+
+    }
+
+    .dropdown-item:hover {
+        background-color: rgba(124, 58, 237, 0.08);
+        color: var(--primary);
+
+    }
+
+    .form-control {
+        border-radius: 6px;
+        border: 1px solid #d1d5db;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 0.15rem rgba(124, 58, 237, 0.25);
+    }
+
+
+    .badge {
+        font-size: 0.7rem;
+    }
+
+    .badge.bg-danger {
+        background-color: var(--accent) !important;
+    }
+
+
+    .badge-stock {
+        background-color: var(--success);
+        color: #fff;
+        font-size: 0.75rem;
+        padding: 4px 8px;
+        border-radius: 4px;
+    }
+
+
+    .product-img {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 8px;
+    }
+
+
+
+    @media (max-width: 576px) {
+
+        .search-bar {
+            height: 29px;
+            font-size: 13px;
+        }
+
+        .search-btn {
+            padding: 2px 6px !important;
+        }
+
+        .navbar-brand .shopping,
+        .navbar-brand .kart {
+            font-size: 10px !important;
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+
+
+<header class="container-fluid px-2 px-sm-3 py-2 border-bottom sticky-top bg-white">
+    <nav class="navbar d-flex align-items-center">
+
+        <!-- LEFT : LOGO (ALL SCREENS) -->
+        <a class="navbar-brand fw-bold text-primary logo font-weight-bold  d-none d-sm-inline" href="{% url 'home' %}">
+            <span class="shopping">Shopping</span><span class="text-dark kart">Kart</span>
+        </a>
+
+        <!-- CENTER : DESKTOP ONLY -->
+        <div class="d-none d-lg-flex flex-grow-1 align-items-center justify-content-center gap-2 px-3 ">
+
+            <!-- <a href="{% url 'product' %}" class="btn btn-colors text-white m-1 py-2">
+                Products
+            </a> -->
+
+            <div class="dropdown flex-shrink-0">
+                <button class="btn btn-colors  py-2 m-1 dropdown-toggle" type="button" id="categoryDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bars me-1"></i>&nbsp;All Categories
+                </button>
+
+                <ul class="dropdown-menu shadow" aria-labelledby="categoryDropdown">
+                    {% for cat in category %}
+                    <li>
+                        <a class="dropdown-item" href="{% url 'category_page' cat.pk %}">
+                            {{ cat.category_name }}
+                        </a>
+                    </li>
+                    {% empty %}
+                    <li><span class="dropdown-item text-muted">No categories</span></li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <form class="d-flex align-items-center flex-grow-1" style="max-width: 40%;" action="{% url 'search' %}">
+                <input class="form-control  search-input flex-grow-1" type="search" value="{{ keyword }}" name="keyword"
+                    placeholder="Search">
+                <button class="btn btn-colors ms-1 m-1 py-2 flex-shrink-0" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- CENTER : MOBILE ONLY (AUTO WIDTH SEARCH) -->
+        <form class="d-flex d-lg-none align-items-center flex-grow-1 mx-2 overflow-hidden" action="{% url 'search' %}">
+            <input class="form-control flex-grow-1 search-input-1 search-bar" type="search" placeholder="Search"
+                value="{{ keyword }}" name="keyword">
+            <button class="btn btn-colors search-btn  ms-1 m-1 py-2 flex-shrink-0" type="submit">
+                <i class="fas fa-search search-icon fa-sm"></i>
+            </button>
+        </form>
+
+        <!-- RIGHT SECTION -->
+        <div class="d-flex align-items-center gap-0 gap-sm-2">
+
+            <!-- DESKTOP LOGIN TEXT -->
+            <div class="d-none d-lg-block">
+                <small>Welcome
+                    <span style="color: var(--primary); font-weight: 600;">
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'user_profile' %}">{{ user.username|capfirst }}</a>
+                        {% else %}
+                        Guest
+                        {% endif %}
+                    </span>
+                </small>
+                <br>
+
+                <div class="d-flex align-items-center gap-2">
+                    {% if user.is_authenticated %}
+                    {% if user.is_staff or user.is_superuser %}
+                    <a href="{% url 'dashboard' %}" class="text-decoration-none me-2">Dashboard&nbsp;</a>
+                    {% endif %}
+
+                    <a href="{% url 'logout' %}" class="text-danger text-decoration-none">Logout</a>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="text-decoration-none">Login</a>
+                    <span class="text-muted">&nbsp;|&nbsp;</span>
+                    <a href="{% url 'signup' %}" class="text-decoration-none">Signup</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- MOBILE LOGIN ICON -->
+            {% if not user.is_authenticated %}
+            <a href="{% url 'login' %}" class="d-lg-none mt-1 ">
+                <i class="fas fa-user fa-md fa-sm-xs"></i>
+            </a>
+            {% endif %}
+
+            <!-- CART (ALL SCREENS) -->
+            <div class="position-relative mx-2 mt-1 mt-sm-1">
+                {% if user.is_authenticated %}
+                <a href="{% url 'user_profile' %}" class="me-2"><i class="fa fa-user"></i></a>
+                {% endif %}
+                <a href="{% url 'cart_detail' %}">
+                    <i class="fas fa-shopping-cart fa-md fa-sm-xs"></i>
+                    <span class="badge bg-danger position-absolute text-white translate-middle"
+                        style="top:-2px; right:-20px;">
+                        {{ cart_quantity }}
+                    </span>
+                </a>
+
+                <!-- <a href="{% url 'login' %}">
+                    <i class="fas fa-shopping-cart fa-md fa-sm-xs mt-1"></i>
+                    <span class="badge bg-danger position-absolute text-white translate-middle"
+                        style="top:2px; right:-23px;">
+                        {{ cart_quantity }}
+                    </span>
+                </a> -->
+
+            </div>
+
+        </div>
+
+    </nav>
+</header>
+
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block page_title %}Manage Products{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="card ">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <form method="GET" action="">
+                <div class="input-group input-group-sm" style="width: 300px;">
+                    <input type="text" name="search" class="form-control float-right" placeholder="Search..."
+                        value="{{ request.GET.search }}">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <a href="{% url 'product_create' %}" class="btn btn-primary">Add New Product</a>
+
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Available</th>
+                        <th>Action</th>
+                        <th>Upated By</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in products %}
+                    <tr>
+                        <td>{{ p.id }}</td>
+                        <td>{{ p.product_name }}</td>
+                        <td class="{% if p.is_available %} text-success {% else %} text-danger {% endif %}">
+                            {{p.is_available }}</td>
+                        <td>
+                            <a href="{% url 'product_update' p.pk %}" class="btn btn-sm btn-warning"><i
+                                    class="fas fa-edit"></i></a>
+                            <a href="{% url 'product_delete' p.pk %}" class="btn btn-sm bg-danger"><i
+                                    class="fas fa-trash text-black"></i></a>
+                        </td>
+                        <td>{{ p.updated_by }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

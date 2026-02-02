@@ -1,0 +1,161 @@
+{% load static %}
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="index3.html" class="brand-link">
+        <img src="{% static 'dist/img/AdminLTELogo.png' %}" alt="AdminLTE Logo"
+            class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">AdminLTE 3 </span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{% static 'dist/img/user2-160x160.jpg' %}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            <div class="info">
+                <a href="#" class="d-block">{{ user.username|capfirst }}</a>
+            </div>
+        </div>
+
+        <!-- SidebarSearch Form -->
+        <!-- <div class="form-inline">
+            <div class="input-group" data-widget="sidebar-search">
+                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+                <div class="input-group-append">
+                    <button class="btn btn-sidebar">
+                        <i class="fas fa-search fa-fw"></i>
+                    </button>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+               with font-awesome or any other icon font library -->
+                <li class="nav-item menu-open">
+
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{% url 'dashboard' %}"
+                                class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Dashboard v1</p>
+                            </a>
+                        </li>
+                        <!-- <li class="nav-item">
+                            <a href="{% url 'dashboard2' %}"
+                                class="nav-link {% if request.resolver_match.url_name == 'dashboard2' %}active{% endif %}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Dashboard v2</p>
+                            </a>
+                        </li> -->
+
+                    </ul>
+                </li>
+
+                <!-- <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-chart-pie"></i>
+                        <p>
+                            Charts
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="pages/charts/chartjs.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>ChartJS</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/charts/flot.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Flot</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/charts/inline.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Inline</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="pages/charts/uplot.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>uPlot</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li> -->
+                {% if user.is_superuser %}
+                <li class="nav-item">
+                    <a href="{% url 'user_list' %}"
+                        class="nav-link {% if '/users/' in request.path %}active{% endif %}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>User</p>
+                    </a>
+                </li>
+                {% endif %}
+                {% if perms.products.view_product and perms.products.add_product and perms.products.change_product %}
+                <li class="nav-item">
+                    <a href="{% url 'product_list' %}"
+                        class="nav-link {% if '/products/' in request.path %}active{% endif %}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Product</p>
+                    </a>
+                </li>
+                {% endif %}
+
+
+                <li class="nav-item">
+                    <a href="{% url 'variant_list' %}"
+                        class="nav-link {% if '/variants/' in request.path %}active{% endif %}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Product Variants</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'category_list' %}"
+                        class="nav-link {% if '/categories/' in request.path %}active{% endif %}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Category</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'order_list' %}"
+                        class="nav-link {% if '/orders/' in request.path %}active{% endif %}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Orders</p>
+                    </a>
+                </li>
+                <!-- <li class="nav-item">
+                    <a href="pages/examples/contacts.html" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Contacts</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="pages/examples/faq.html" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>FAQ</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="pages/examples/contact-us.html" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Contact us</p>
+                    </a>
+                </li> -->
+
+
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>

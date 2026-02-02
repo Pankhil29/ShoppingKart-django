@@ -1,0 +1,33 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="row d-flex justify-content-center p-5">
+        <div class="col-md-6">
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title">Add/Edit Category</h3>
+                </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Category Name</label>
+                            {{ form.category_name }}
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <label>Description</label>
+                                {{ form.description }}
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-info">Save Category</button>
+                        </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+Step 0: Start
+git checkout master
+git pull origin master    # latest code laao
+
+Step 1: Branch banaye / switch
+git checkout -b pankhil-auth    # ya existing branch
+git merge master                # master changes apni branch me
+
+Step 2: Code kaam
+# coding
+git add .
+git commit -m "message"
+
+Step 3: Push apni branch
+git push origin pankhil-auth
+
+Step 4: GitHub pe Pull Request
+base = master
+compare = pankhil-auth
+Merge PR → master updated

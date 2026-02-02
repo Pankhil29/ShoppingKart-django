@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container my-5">
+    <form method="post" class="mt-4">
+        {% csrf_token %}
+        <div class="row g-4">
+
+            <!-- LEFT SIDE -->
+            <div class="col-lg-8">
+
+                <!-- SHIPPING ADDRESS -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="mb-3">Shipping Address</h5>
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" class="form-control" name="name" required>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" name="phone" required>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">Address</label>
+                                <textarea class="form-control" rows="2" name="address" required></textarea>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">City</label>
+                                <input type="text" class="form-control" name="city" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">State</label>
+                                <input type="text" class="form-control" name="state" required>
+                            </div>
+
+                            <div class="col-md-4">
+                                <label class="form-label">Pincode</label>
+                                <input type="text" class="form-control" name="pincode" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ORDER ITEMS -->
+                <h5 class="mb-3">Order Items</h5>
+
+                {% for item in cart_items %}
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <strong>{{ item.variant.product.product_name }}</strong><br>
+                            <small class="text-muted">
+                                Qty: {{ item.quantity }} × ₹{{ item.variant.price }}
+                            </small>
+                        </div>
+                        <strong>₹{{ item.get_subtotal }}</strong>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="alert alert-warning">Your cart is empty</div>
+                {% endfor %}
+
+            </div>
+
+            <!-- RIGHT SIDE -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="mb-3">Price Details</h5>
+
+                        <div class="d-flex justify-content-between">
+                            <span>Total</span>
+                            <span>₹{{ total }}</span>
+                        </div>
+
+                        <div class="d-flex justify-content-between text-success">
+                            <span>Discount (10%)</span>
+                            <span>- ₹{{ discount }}</span>
+                        </div>
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between fw-bold fs-5">
+                            <span>Payable</span>
+                            <span>₹{{ grand_total }}</span>
+                        </div>
+
+
+                        <button type="submit" class="btn btn-success w-100 py-2 mt-3">
+                            Place Order
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    
+    .wishlist-card {
+        border: 1px solid var(--primary-border);
+        border-radius: 12px;
+        background: var(--white);
+        transition: all 0.3s ease;
+        position: relative;
+        height: 100%;
+    }
+
+    .wishlist-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(124, 58, 237, 0.1);
+        border-color: var(--primary);
+    }
+
+    .product-img-container {
+        height: 200px;
+        overflow: hidden;
+        border-radius: 12px 12px 0 0;
+        background: #fdfdfd;
+    }
+
+    .product-img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .remove-wishlist {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: rgba(255, 255, 255, 0.9);
+        color: #ef4444;
+        border: none;
+        border-radius: 50%;
+        width: 35px;
+        height: 35px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: 0.2s;
+        z-index: 10;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .remove-wishlist:hover {
+        background: #ef4444;
+        color: white;
+    }
+
+    .btn-view-product {
+        background-color: var(--primary);
+        color: white;
+        border-radius: 8px;
+        width: 100%;
+        font-weight: 500;
+        border: none;
+        padding: 8px;
+    }
+
+    .btn-view-product:hover {
+        background-color: var(--primary-hover);
+        color: white;
+    }
+
+    .price-tag {
+        color: var(--primary);
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="row g-4">
+
+        <!-- Cart Items -->
+        <div class="col-lg-8 m-auto">
+            <div class="card shadow-sm ">
+                <div class="card-body ">
+
+                    <!-- Item -->
+                    {% for pro in cart_items %}
+                    <div class="row align-items-center mb-4">
+                        <div class="col-3 col-md-2">
+                            <a href="{% url 'product_details_page' pro.product.slug %}">
+                                <img src="{{pro.product.image.url}}" class="img-fluid rounded">
+                            </a>
+                        </div>
+                        <div class="col-9 col-md-4">
+                            <h6 class="mb-1">{{ pro.product.product_name }}</h6>
+                            <p>Variant: {{ pro.variant.size }} / {{ pro.variant.color }}</p>
+                            <small class="text-muted">{{ pro.product.description }}</small>
+                        </div>
+
+                        <div class="col-md-3 mt-3 mt-md-0">
+                            <div class="input-group input-group-sm">
+                                <a href="{% url 'decrease_quantity'  pro.variant.id %}"><button
+                                        class="btn btn-outline-success">-</button></a>
+                                <input type="text" class="form-control text-center" value="{{pro.quantity}}">
+                                <a href="{% url 'increase_quantity'  pro.variant.id %}"><button
+                                        class="btn btn-outline-success">+</button></a>
+                            </div>
+                        </div>
+
+                        <div class="col-md-auto mt-3 mt-md-0">
+                            <strong class="text-success">₹ {{ pro.subtotal }}</strong>
+                        </div>
+
+                        <div class="col-md-1 mt-3 mt-md-0 text-end">
+                            <a href="{% url 'remove_from_cart' pro.variant.id%}"><button
+                                    class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button></a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <hr>
+
+                    <!-- Repeat item block for more products -->
+                    <h3>Wishlist Items</h1>
+                        {% if wishlist_product %}
+                        <div class="row g-4">
+                            {% for product in wishlist_product %}
+                            <div class="col-xl-4 col-md-6" id="product-card-{{ product.id }}">
+                                <div class="card wishlist-card border-0 shadow-sm">
+                                    <button class="remove-wishlist" onclick="toggleWishlist('{{ product.id }}')">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+
+                                    <div class="product-img-container">
+                                        {% if product.image %}
+                                        <img src="{{ product.image.url }}" alt="{{ product.product_name }}">
+                                        {% else %}
+                                        <div class="d-flex align-items-center justify-content-center h-100">
+                                            <i class="bi bi-image text-muted" style="font-size: 3rem;"></i>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="card-body">
+                                        <h6 class="text-truncate mb-1" title="{{ product.product_name }}">{{ product.product_name }}
+                                        </h6>
+                                        <p class="text-muted small mb-2">{{ product.category.category_name }}</p>
+
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <span class="price-tag">₹{{ product.min_price|floatformat:2 }}</span>
+                                            {% if not product.is_available %}
+                                            <span class="badge bg-danger">Out of Stock</span>
+                                            {% endif %}
+                                        </div>
+
+                                        <a href="{% url 'product_details_page' product.slug %}"
+                                            class="btn btn-view-product">
+                                            View Details
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="card border-0 shadow-sm p-5 text-center" style="border-radius: 12px;">
+                            <div class="mb-3">
+                                <i class="bi bi-heart text-muted" style="font-size: 4rem; opacity: 0.3;"></i>
+                            </div>
+                            <h5>Your wishlist is empty</h5>
+                            <p class="text-muted">Save items you like to find them easily later.</p>
+                            <a href="{% url 'home' %}" class="btn btn-primary px-4 py-2 mx-auto mt-2"
+                                style="background-color: var(--primary); border: none;">Explore Products</a>
+                        </div>
+                        {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="mb-3">Summary</h5>
+
+                    <div class="d-flex justify-content-between">
+                        <span>Subtotal</span>
+                        <span>₹ {{ total }}</span>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <span>Discount</span>
+                        <span>10% (-{{ discount }})</span>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex justify-content-between fw-bold text-success fs-5">
+                        <span>Total</span>
+                        <span>{{ final_total }}</span>
+                    </div>
+
+                    <a href="{% url 'checkout' %}"><button class="btn btn-success w-100 mt-3">Checkout</button></a>
+                    <a href="{% url 'home' %}" class="btn btn-outline-success w-100 mt-2">Continue Shopping</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock %}

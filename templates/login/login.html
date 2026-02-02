@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .body-1 {
+        background: #f5f3ff;
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+    }
+
+    .login-box {
+        width: 100%;
+        max-width: 420px;
+        background: #fff;
+        padding: 32px;
+        border-radius: 18px;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+        border: 1px solid #e5e7eb;
+    }
+
+    .login-box h2 {
+        text-align: center;
+        font-weight: 700;
+        color: #7C3AED;
+        margin-bottom: 8px;
+    }
+
+    .login-box p {
+        text-align: center;
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 28px;
+    }
+
+    /* INPUT GROUP */
+    .input-group-custom {
+        position: relative;
+        margin-bottom: 24px;
+    }
+
+    .input-group-custom input {
+        width: 100%;
+        padding: 14px 12px;
+        border-radius: 12px;
+        border: 1.5px solid #ddd;
+        /* background: #f9f7ff; */
+        font-size: 0.95rem;
+        outline: none;
+        transition: 0.3s;
+    }
+
+    .input-group-custom input:focus {
+        border-color: #7C3AED;
+        box-shadow: 0 0 8px rgba(124, 58, 237, 0.25);
+        background: #fff;
+    }
+
+    .input-group-custom label {
+        position: absolute;
+        top: 50%;
+        left: 14px;
+        transform: translateY(-50%);
+        background: #fff;
+        padding: 0 6px;
+        color: #888;
+        font-size: 0.85rem;
+        pointer-events: none;
+        transition: 0.3s;
+    }
+
+    .input-group-custom input:focus+label,
+    .input-group-custom input:not(:placeholder-shown)+label {
+        top: 0;
+        font-size: 0.75rem;
+        color: #7C3AED;
+    }
+
+    /* ERROR */
+    .form-error {
+        display: block;
+        margin-top: 5px;
+        font-size: 0.78rem;
+        color: #e74c3c;
+        text-align: left;
+    }
+
+    /* BUTTON */
+    .login-btn {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        background: #7C3AED;
+        color: #fff;
+        font-weight: 600;
+        border: none;
+        transition: 0.3s;
+    }
+
+    .login-btn:hover {
+        background: #5b21b6;
+        transform: translateY(-2px);
+    }
+
+    /* FOOTER */
+    .form-footer {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 0.85rem;
+    }
+
+    .form-footer a {
+        color: #7C3AED;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .form-footer a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+
+<div class="body-1">
+    <div class="login-box">
+        <h2>Welcome Back</h2>
+        <p>Login to continue shopping</p>
+
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="alert alert-danger p-2 mb-3"
+                style="border-radius: 12px; font-size: 0.85rem; background-color: #fee2e2; color: #b91c1c; border: 1px solid #fecaca; text-align: center;">
+                {% for error in form.non_field_errors %}
+                {{ error }}
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% for field in form %}
+            <div class="input-group-custom">
+                {{ field }}
+                <label>{{ field.label }}</label>
+
+                {% if field.errors %}
+                {% for error in field.errors %}
+                <div class="text-danger text-start small form-error">{{ error }}</div>
+                {% endfor %}
+                {% endif %}
+            </div>
+            {% endfor %}
+
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+
+        <div class="form-footer">
+            Don’t have an account?
+            <a href="{% url 'signup' %}">Create one</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

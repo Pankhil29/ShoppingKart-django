@@ -1,0 +1,51 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="row d-flex justify-content-center p-5">
+        <div class="col-md-6">
+            <div class="card card-info">
+                <div class="card-header">
+                    <h3 class="card-title">Add/Edit Product Variant</h3>
+                </div>
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Product</label>
+                            {{ form.product }}
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <label>Size</label>
+                                {{ form.size }}
+                            </div>
+                            <div class="col-6">
+                                <label>Color</label>
+                                {{ form.color }}
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <label>Price</label>
+                                {{ form.price }}
+                            </div>
+                            <div class="col-6">
+                                <label>Stock</label>
+                                {{ form.stock }}
+                            </div>
+                        </div>
+                        <div class="form-check mt-3">
+                            {{ form.is_active }}
+                            <label class="form-check-label">Is Active</label>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-info">Save Variant</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

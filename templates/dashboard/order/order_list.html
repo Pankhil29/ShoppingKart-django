@@ -1,0 +1,50 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block page_title %}Manage Category {% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+  <div class="card ">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <form method="GET" action="">
+        <div class="input-group input-group-sm" style="width: 300px;">
+          <input type="text" name="search" class="form-control float-right" placeholder="Search..."
+            value="{{ request.GET.search }}">
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-default">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="card-body">
+      <table class="table table-hover text-nowrap">
+        <thead>
+          <tr>
+
+            <th>ID</th>
+            <th>User</th>
+            <th>Order Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for order in orders %}
+          <tr>
+
+            <td>{{ order.id }}</td>
+            <td>{{ order.user }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+              <a href="{% url 'order_detail' order.id %}" class="btn btn-sm btn-warning"><i class="fas fa-edit"></i></a>
+
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

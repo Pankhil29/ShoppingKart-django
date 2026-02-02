@@ -1,0 +1,66 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <form method="GET" action="">
+                <div class="input-group input-group-sm" style="width: 300px;">
+                    <input type="text" name="search" class="form-control float-right" placeholder="Search..."
+                        value="{{ request.GET.search }}">
+                    <div class="input-group-append">
+                        <button type="submit" class="btn btn-default">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+            </form>
+            <h3 class="card-title">Registered Users</h3>
+        </div>
+        <div class="card-body table-responsive p-0">
+            <table class="table table-hover text-nowrap">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.get_full_name }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% if user.is_superuser %}<span class="badge badge-danger">Admin</span>
+                            {% elif user.is_staff %}<span class="badge badge-info">Staff</span>
+                            {% else %}<span class="badge badge-secondary">Customer</span>{% endif %}
+                        </td>
+                        <td>
+                            <span class="badge {% if user.is_active %}badge-success{% else %}badge-warning{% endif %}">
+                                {{ user.is_active|yesno:"Active,Inactive" }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{% url 'user_update' user.pk %}" class="btn btn-sm btn-warning"><i
+                                    class="fas fa-edit"></i></a>
+                            <a href="{% url 'user_deactivate' user.id %}"
+                                class="btn btn-sm {% if user.is_active %}btn-danger{% else %}btn-success{% endif %}">
+                                {% if user.is_active %}Deactivate{% else %}Activate{% endif %} &nbsp;<i
+                                    class="fas fa-trash text-black"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

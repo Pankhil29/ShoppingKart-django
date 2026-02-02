@@ -1,0 +1,70 @@
+{% extends 'dashboard/base_dashboard.html' %}
+
+{% block page_title %}Manage Product Variant{% endblock %}
+
+{% block content %}
+<div class="content-wrapper">
+  <div class="card ">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <form method="GET" action="">
+        <div class="input-group input-group-sm" style="width: 300px;">
+          <input type="text" name="search" class="form-control float-right" placeholder="Search..."
+            value="{{ request.GET.search }}">
+          <div class="input-group-append">
+            <button type="submit" class="btn btn-default">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+      <a href="{% url 'add_variant' %}" class="btn btn-primary">Add Product Variant</a>
+
+    </div>
+    <div class="card-body">
+      <table class="table table-hover text-nowrap">
+        <thead>
+          <tr>
+
+            <th>ID</th>
+            <th>Product</th>
+            <th>Size</th>
+            <th>Color</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Status</th>
+            <th>Actions</th>
+            <th>Updated By</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for variant in products %}
+          <tr>
+
+            <td>{{ variant.id }}</td>
+            <td>{{ variant.product.product_name }}</td>
+            <td>{{ variant.size|default:"N/A" }} </td>
+            <td> {{ variant.color|default:"N/A" }} </td>
+            <td>₹{{ variant.price }}</td>
+            <td>
+              {% if variant.stock < 5 %} <span class="badge badge-danger">{{ variant.stock }} (Low)</span>
+                {% else %}
+                <span class="badge badge-success">{{ variant.stock }}</span>
+                {% endif %}
+            </td>
+            <td class="{% if variant.is_active %} text-success {% else %} text-danger {% endif %}  ">
+              {{ variant.is_active|yesno:"Active,Inactive" }}</td>
+            <td>
+              <a href="{% url 'variant_update' variant.id %}" class="btn btn-sm btn-warning"><i
+                  class="fas fa-edit"></i></a>
+              <a href="{% url 'variant_delete' variant.id %}" class="btn btn-sm bg-danger"><i
+                  class="fas fa-trash text-black"></i></a>
+            </td>
+            <td>{{ variant.updated_by }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

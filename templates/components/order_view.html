@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    /* CSS Variables based on your palette */
+    :root {
+        --primary: #7C3AED;
+        --primary-hover: #6D28D9;
+        --accent: #EC4899;
+        --text-dark: #111827;
+        --text-muted: #6B7280;
+        --bg-light: #F9FAFB;
+        --white: #FFFFFF;
+        --success: #16A34A;
+        --primary-border: #beaadf;
+    }
+
+    .order-card {
+        border: 1px solid var(--primary-border);
+        border-radius: 12px;
+        overflow: hidden;
+        background: var(--white);
+        transition: transform 0.2s;
+    }
+
+    .order-card:hover {
+        border-color: var(--primary); /* Hover par border primary color ki hogi */
+    }
+
+    .status-badge {
+        padding: 6px 14px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    /* Status Colors adjusted to match Purple/Violet Theme */
+    .status-pending { background: #FEF3C7; color: #92400E; } /* Amber */
+    .status-placed { background: #E0E7FF; color: #3730A3; }  /* Indigo */
+    .status-shipped { background: #F5F3FF; color: var(--primary); } /* Light Purple */
+    .status-delivered { background: #DCFCE7; color: var(--success); } /* Green */
+    .status-cancelled { background: #FEE2E2; color: #991B1B; } /* Red */
+
+    .item-img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 8px;
+        background: var(--bg-light);
+        border: 1px solid var(--primary-border);
+    }
+
+    .text-muted-small {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+    }
+
+    .table thead th {
+        background-color: var(--bg-light);
+        color: var(--text-dark);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.05em;
+    }
+
+    /* Custom Button for Empty State */
+    .btn-primary-custom {
+        background-color: var(--primary);
+        color: var(--white);
+        border-radius: 8px;
+        transition: all 0.3s;
+    }
+    .btn-primary-custom:hover {
+        background-color: var(--primary-hover);
+        color: var(--white);
+        transform: translateY(-1px);
+    }
+
+    .text-primary {
+        color: var(--primary) !important;
+    }
+    
+    .bg-success-custom {
+        background-color: var(--success);
+        color: white;
+    }
+</style>
+
+<div class="container-fluid min-vh-100" style="background-color: var(--bg-light);">
+    <div class="row min-vh-100">
+        {% include 'components/profileSidebar.html' %}
+
+        <div class="col-lg-9 col-md-8 p-lg-5 p-3">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="mb-0" style="color: var(--text-dark); font-weight: 700;">My Order History</h3>
+                <span class="badge bg-success-custom px-3 py-2">{{ orders.count }} Orders</span>
+            </div>
+
+            {% if orders %}
+            {% for order in orders %}
+            <div class="card order-card mb-4 shadow-sm border-0">
+                <div class="card-header border-bottom bg-white d-flex justify-content-between align-items-center py-3">
+                    <div>
+                        <p class="mb-0 text-muted-small">Order Date: <strong>{{ order.created_at|date:"d M, Y" }}</strong></p>
+                        <h6 class="mb-0 mt-1" style="color: var(--primary);">Order #{{ order.id }}</h6>
+                    </div>
+                    <div class="text-end">
+                        <span class="status-badge status-{{ order.status|lower }}">
+                            {{ order.get_status_display }}
+                        </span>
+                    </div>
+                </div>
+
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0 align-middle">
+                            <thead>
+                                <tr>
+                                    <th class="ps-4 border-0">Product Details</th>
+                                    <th class="border-0 text-center">Qty</th>
+                                    <th class="border-0 text-center">Price</th>
+                                    <th class="border-0 text-end pe-4">Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.items.all %}
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="d-flex align-items-center gap-3">
+                                            {% if item.product_variant.product.image %}
+                                            <img src="{{ item.product_variant.product.image.url }}" class="item-img">
+                                            {% else %}
+                                            <div class="item-img d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-box text-muted"></i>
+                                            </div>
+                                            {% endif %}
+
+                                            <div>
+                                                <div class="fw-bold" style="color: var(--text-dark);">{{ item.product_name }}</div>
+                                                <div class="text-muted-small">
+                                                    {% if item.product_variant.color %}Color: {{ item.product_variant.color }}{% endif %}
+                                                    {% if item.product_variant.size %} | Size: {{ item.product_variant.size }}{% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">{{ item.quantity }}</td>
+                                    <td class="text-center text-muted">₹{{ item.price|floatformat:2 }}</td>
+                                    <td class="text-end pe-4 fw-bold" style="color: var(--text-dark);">₹{{ item.get_total|floatformat:2 }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-white border-top p-3">
+                    <div class="row align-items-center">
+                        <div class="col-md-7">
+                            <p class="mb-1 text-muted-small" style="color: var(--primary) !important;"><i class="bi bi-geo-alt-fill"></i> Shipping Address</p>
+                            <p class="mb-0 small text-dark">
+                                <strong>{{ order.name }}</strong>, {{ order.address }}, {{ order.city }}, {{ order.state }} - {{ order.pincode }}
+                            </p>
+                        </div>
+                        <div class="col-md-5 text-md-end mt-3 mt-md-0">
+                            <span class="text-muted small me-2">Grand Total</span>
+                            <h4 class="d-inline mb-0 text-primary" style="font-weight: 800;">₹{{ order.total_amount|floatformat:2 }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="card border-0 shadow-sm p-5 text-center" style="border-radius: 12px;">
+                <div class="mb-3">
+                    <i class="bi bi-cart-x" style="font-size: 4rem; color: var(--primary-border);"></i>
+                </div>
+                <h5 style="color: var(--text-dark);">No orders yet</h5>
+                <p class="text-muted">Explore our collection and place your first order!</p>
+                <a href="{% url 'product_list' %}" class="btn btn-primary-custom px-4 py-2 mx-auto" style="width: fit-content;">Browse Products</a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

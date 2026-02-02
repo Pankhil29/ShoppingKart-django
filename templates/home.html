@@ -1,0 +1,262 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .hero {
+        position: relative;
+        height: 75vh;
+        width: 100%;
+        background: url("{% static 'img/heromain.png' %}");
+        background-size: cover;
+        background-position: center right;
+
+        /* Desktop par content right side dikhane ke liye */
+
+        padding-right: 5%;
+        /* Right se gap */
+        overflow: hidden;
+    }
+
+    /* Background image agar light ho toh text dikhane ke liye halka sa gradient */
+    .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        max-width: 550px;
+        /* background: rgba(255, 255, 255, 0.8); */
+        /* Text ke peeche glass effect */
+        padding: 30px;
+        border-radius: 20px;
+        /* backdrop-filter: blur(5px); */
+        /* box-shadow: 0 16px 35px rgba(0, 0, 0, 0.1); */
+    }
+
+    .hero h1 {
+        font-size: 2.3rem;
+        font-weight: 800;
+        line-height: 1.1;
+        color: #222;
+        margin-bottom: 20px;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+        color: #555;
+        margin-bottom: 30px;
+    }
+
+    /* ================= RESPONSIVE (MOBILE) ================= */
+    @media (max-width: 991px) {
+        .hero {
+            padding-right: 5%;
+        }
+
+        .hero h1 {
+            font-size: 2.1rem;
+        }
+    }
+
+
+    .btn-hero {
+        background: var(--white);
+        color: var(--primary) !important;
+        border-radius: 9px;
+        padding: 30px auto !important;
+        margin-top: auto;
+        border: 2px solid var(--primary-border);
+    }
+
+    .btn-hero:hover {
+        background: var(--primary-hover);
+        color: white !important;
+    }
+
+    @media (max-width: 768px) {
+        .hero {
+            height: 60vh;
+            justify-content: center !important;
+            /* Mobile par text center */
+            padding: 20px;
+            background-position: center;
+            /* Image center focus */
+        }
+
+        .hero::before {
+            background: rgba(0, 0, 0, 0.3);
+            /* Mobile par image ke upar dark layer taaki white text dikhe */
+        }
+
+        .hero-content {
+            text-align: center;
+            /* background: rgba(255, 255, 255, 0.9); */
+            padding: 25px 15px;
+            max-width: 100%;
+            backdrop-filter: blur(1px);
+        }
+
+        .hero h1 {
+            font-size: 1.6rem;
+        }
+
+        .hero p {
+            font-size: 0.8rem;
+        }
+
+
+    }
+
+    @media (max-width: 578px) {
+
+        .hero h1 {
+            font-size: 1.3rem;
+        }
+
+        .hero p {
+            font-size: 0.5;
+            margin-bottom: 10px;
+        }
+
+        .btn-hero {
+            padding: 5px 12px !important;
+            font-size: 12px;
+        }
+
+    }
+
+
+    .product-card {
+        height: 100%;
+        background: #fff;
+        border-radius: 18px;
+        border: 1px solid var(--primary-border);
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .product-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: contain;
+        padding: 16px;
+        border-radius: 18px;
+    }
+
+    .product-body {
+        padding: 0 16px 16px;
+
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+
+    .product-category {
+        font-size: 0.75rem;
+        color: #8a8a8a;
+        margin-top: 6px;
+    }
+
+    .product-title {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin: 6px 0;
+    }
+
+    .price {
+        font-weight: 600;
+        color: var(--accent);
+        margin-bottom: 4px;
+    }
+
+    .product-desc {
+        font-size: 0.8rem;
+        color: #777;
+        flex-grow: 1;
+    }
+
+    .btn-atc {
+        background: var(--primary);
+        color: #fff !important;
+        border-radius: 5px;
+        margin-top: auto;
+    }
+
+    .btn-atc:hover {
+        background: var(--primary-hover);
+    }
+
+    @media (max-width: 768px) {
+
+        .product-card img {
+            height: 150px;
+        }
+
+    }
+
+    .pd-url {
+        text-decoration: none;
+    }
+
+    .pd-url:hover {
+        text-decoration: none;
+    }
+</style>
+
+<section class="hero d-flex justify-content-end align-items-center">
+    <div class="hero-content">
+        <h1>New Season Arrivals</h1>
+        <p>Best quality products at unbeatable prices</p>
+        <a href="{% url 'product' %}" class="btn btn-hero  px-3 px-sm-5">Shop Now</a>
+    </div>
+</section>
+
+
+<section class="product-list container my-5">
+    <h2 class="mb-4">Featured Products</h2>
+    <div class="row">
+        {% for pro in products %}
+        <div class="col-xl-3 col-lg-4 col-sm-6 mb-4 px-5 px-sm-2 ">
+
+            <div class="product-card">
+                <a href="{% url 'product_details_page' pro.slug %}" class="pd-url text-dark">
+                    <img src="{{ pro.image.url }}" alt="{{ pro.product_name }}">
+                    <div class="product-body">
+                        <small class="text-muted text-uppercase">{{ pro.category.category_name }}</small>
+                        <h6 class="product-title mb-1">{{ pro.product_name }}</h6>
+
+                        <div class="mb-2">
+                            <span class="price">₹{{ pro.min_price }}</span>
+                            {% if pro.avg_rating %}
+                            <span class="ms-2 text-warning small">
+                                ★ {{ pro.avg_rating|floatformat:1 }}
+                            </span>
+                            {% endif %}
+                        </div>
+
+                        <p class="product-desc">{{ pro.description|truncatechars:50 }}</p>
+                        <span class="btn btn-atc btn-sm w-100 mt-2">View Options</span>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% endblock %}
