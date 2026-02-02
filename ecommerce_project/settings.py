@@ -47,7 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'cloudinary_storage',
     'django.contrib.staticfiles',
+    'cloudinary',
     'products',
     'cart',
     'login',
@@ -139,7 +141,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_DIRS = [
-    'ecommerce_project/static',
+    os.path.join(BASE_DIR, 'ecommerce_project/static'),
 ]
 
 MEDIA_URL = '/media/'
@@ -147,3 +149,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dxaoizdzx',
+    'API_KEY': '891495593627747',
+    'API_SECRET': 'iLvoHrzflrh8aJQMT2UhdWmCvuc'
+}

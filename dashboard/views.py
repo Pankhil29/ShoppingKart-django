@@ -11,10 +11,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
 
-# Sirf Staff aur Admin ke liye
+
 staff_required = user_passes_test(lambda u: u.is_staff or u.is_superuser, login_url='login')
 
-# Sirf Superuser (Admin) ke liye
+
 admin_only = user_passes_test(lambda u: u.is_superuser, login_url='login')
 
 @staff_required
