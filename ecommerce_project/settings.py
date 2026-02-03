@@ -35,8 +35,7 @@ DEBUG = 'RENDER' not in os.environ
 
 ALLOWED_HOSTS = []
 render_external_url = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
-if render_external_url:
-    ALLOWED_HOSTS.append(render_external_url)
+ALLOWED_HOSTS = ['*', render_external_url] if render_external_url else ['*']
 
 
 # Application definition
@@ -139,16 +138,17 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'ecommerce_project/static'),
+    os.path.join(BASE_DIR, "ecommerce_project/static"),
+    os.path.join(BASE_DIR, "static"), # Extra safety agar aapka folder bahar ho
 ]
 
 MEDIA_URL = '/media/'
 # MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.StaticFilesStorage'
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
