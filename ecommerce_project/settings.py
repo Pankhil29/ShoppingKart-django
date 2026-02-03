@@ -140,8 +140,8 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "ecommerce_project/static"),
-    os.path.join(BASE_DIR, "static"), # Extra safety agar aapka folder bahar ho
+    os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'ecommerce_project', 'static'),
 ]
 
 MEDIA_URL = '/media/'
