@@ -209,18 +209,32 @@ CLOUDINARY_STORAGE = {
     'API_KEY': os.environ.get('API_KEY'),
     'API_SECRET': os.environ.get('API_SECRET'),
 }
+# --- STORAGE SYSTEM FIX (Simplified for Render & Django 6.0) ---
 
-# --- STORAGE SYSTEM FIX (For Django 6.0 & Cloudinary) ---
 if DEBUG:
     # Local Storage
     STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
     DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 else:
-    # Render Storage: WhiteNoise for Static, Cloudinary for Media
-    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+    # Render Production:
+    # 'CompressedStaticFilesStorage' ko hata kar sirf 'StaticFilesStorage' kiya hai
+    # Isse missing .map files ka error nahi aayega.
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-WHITENOISE_MANIFEST_STRICT = False
-WHITENOISE_KEEP_ONLY_HASHED_FILES = False
+
+# Modern Django 4.2/6.0 compatibility
+STORAGES = {
+    "default": {
+        "BACKEND": DEFAULT_FILE_STORAGE,
+    },
+    "staticfiles": {
+        "BACKEND": STATICFILES_STORAGE,
+    },
+}
+
+# WhiteNoise ke nakhre khatam karne ke liye extra settings
+WHITENOISE_MANIFEST_STRICT = False  # Missing files par build fail nahi hoga
+WHITENOISE_USE_FINDERS = True       # Static files ko dhoondne mein help karega
 # Modern Django 4.2/6.0 compatibility
 STORAGES = {
     "default": {
