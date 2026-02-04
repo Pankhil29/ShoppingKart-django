@@ -113,37 +113,36 @@
 
 import os
 from pathlib import Path
-import dj_database_url  # Database ke liye zaroori hai
+import dj_database_url
 from dotenv import load_dotenv
 
+# Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# .env load karein
+# .env file load karein (sirf local ke liye kaam karega)
 load_dotenv(os.path.join(BASE_DIR, '.env'))
 
 # --- SECURITY ---
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-key-123')
 
-# Render par DEBUG False hona chahiye, Local par True
+# Render par Environment Variable mein DEBUG=False set karna zaroori hai
 DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
 
-ALLOWED_HOSTS = ['*'] # Render aur Local dono ke liye
+ALLOWED_HOSTS = ['*']
 
-# --- APPS ---
+# --- APPLICATION DEFINITION ---
 INSTALLED_APPS = [
-    'cloudinary_storage', # staticfiles se pehle aana chahiye
+    'cloudinary_storage',  # Staticfiles se pehle hona chahiye
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'cloudinary', # Cloudinary library
+    'cloudinary',
     
-    # Third party
+    # Third party & Local Apps
     'widget_tweaks',
-
-    # Local Apps
     'products',
     'cart',
     'login',
@@ -151,10 +150,9 @@ INSTALLED_APPS = [
     'order',
 ]
 
-# --- MIDDLEWARE ---
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware', # Static files serve karne ke liye
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Static files ke liye
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -165,7 +163,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'ecommerce_project.urls'
 
-# --- TEMPLATES ---
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -184,8 +181,9 @@ TEMPLATES = [
     },
 ]
 
+WSGI_APPLICATION = 'ecommerce_project.wsgi.application'
+
 # --- DATABASE ---
-# Local par SQLite chalega, Render par PostgreSQL (DATABASE_URL se)
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -193,10 +191,11 @@ DATABASES = {
     }
 }
 
+# Render par PostgreSQL use karne ke liye
 if not DEBUG and os.environ.get('DATABASE_URL'):
     DATABASES['default'] = dj_database_url.config(conn_max_age=600)
 
-# --- STATIC & MEDIA (Cloudinary Fix) ---
+# --- STATIC & MEDIA SETTINGS ---
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -204,36 +203,46 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Cloudinary Configuration
+# Cloudinary Config
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': os.environ.get('CLOUD_NAME'),
     'API_KEY': os.environ.get('API_KEY'),
     'API_SECRET': os.environ.get('API_SECRET'),
 }
 
-# --- STORAGES (Django 4.2+ Format) ---
+# --- STORAGE SYSTEM FIX (For Django 6.0 & Cloudinary) ---
 if DEBUG:
-    # Local Development: Files local folder se aayengi
-    STORAGES = {
-        "default": {
-            "BACKEND": "django.core.files.storage.FileSystemStorage",
-        },
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        },
-    }
+    # Local Storage
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+    DEFAULT_FILE_STORAGE = 'django.core.files.storage.FileSystemStorage'
 else:
-    # Production (Render): Media Cloudinary par, Static Whitenoise par
-    STORAGES = {
-        "default": {
-            "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
-        },
-        "staticfiles": {
-            "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
-        },
-    }
+    # Render Storage: WhiteNoise for Static, Cloudinary for Media
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# Whitenoise fix for missing files (AdminLTE error ke liye)
+# Modern Django 4.2/6.0 compatibility
+STORAGES = {
+    "default": {
+        "BACKEND": DEFAULT_FILE_STORAGE,
+    },
+    "staticfiles": {
+        "BACKEND": STATICFILES_STORAGE,
+    },
+}
+
+# WhiteNoise: AdminLTE .map files missing error fix
 WHITENOISE_MANIFEST_STRICT = False
 
+# --- OTHERS ---
+AUTH_PASSWORD_VALIDATORS = [
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
+]
+
+LANGUAGE_CODE = 'en-us'
+TIME_ZONE = 'UTC'
+USE_I18N = True
+USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
