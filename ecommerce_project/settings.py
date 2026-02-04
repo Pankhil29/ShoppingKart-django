@@ -193,8 +193,8 @@ DATABASES = {
 }
 
 # Render par PostgreSQL use karne ke liye
-if not DEBUG and os.environ.get('DATABASE_URL'):
-    DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+if os.environ.get('DATABASE_URL'):
+    DATABASES['default'] = dj_database_url.config(conn_max_age=600, ssl_require=True)
 
 # --- STATIC & MEDIA SETTINGS ---
 STATIC_URL = '/static/'
@@ -220,7 +220,7 @@ else:
     # Render Production:
     # 'CompressedStaticFilesStorage' ko hata kar sirf 'StaticFilesStorage' kiya hai
     # Isse missing .map files ka error nahi aayega.
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 # Modern Django 4.2/6.0 compatibility
