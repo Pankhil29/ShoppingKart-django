@@ -219,7 +219,8 @@ else:
     # Render Storage: WhiteNoise for Static, Cloudinary for Media
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-
+WHITENOISE_MANIFEST_STRICT = False
+WHITENOISE_KEEP_ONLY_HASHED_FILES = False
 # Modern Django 4.2/6.0 compatibility
 STORAGES = {
     "default": {
