@@ -126,8 +126,8 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-local-key-123')
 
 # Render par Environment Variable mein DEBUG=False set karna zaroori hai
-# DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True').lower() == 'true'
+# DEBUG = True
 
 ALLOWED_HOSTS = ['shoppingkart-django.onrender.com', 'localhost', '127.0.0.1', '.onrender.com']
 
