@@ -206,9 +206,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Cloudinary Config
 CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('dxaoizdzx'),
-    'API_KEY': os.environ.get('891495593627747'),
-    'API_SECRET': os.environ.get('iLvoHrzflrh8aJQMT2UhdWmCvuc'),
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 # --- STORAGE SYSTEM FIX (Simplified for Render & Django 6.0) ---
 
