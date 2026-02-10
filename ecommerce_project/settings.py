@@ -235,12 +235,11 @@ STORAGES = {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        "BACKEND": "whitenoise.storage.StaticFilesStorage",
     },
 }
 
-# WhiteNoise: AdminLTE .map files missing error fix
-WHITENOISE_MANIFEST_STRICT = False
+
 
 # --- OTHERS ---
 AUTH_PASSWORD_VALIDATORS = [
