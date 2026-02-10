@@ -223,26 +223,19 @@ else:
     STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# Modern Django 4.2/6.0 compatibility
-STORAGES = {
-    "default": {
-        "BACKEND": DEFAULT_FILE_STORAGE,
-    },
-    "staticfiles": {
-        "BACKEND": STATICFILES_STORAGE,
-    },
-}
+
+
 
 # WhiteNoise ke nakhre khatam karne ke liye extra settings
 WHITENOISE_MANIFEST_STRICT = False  # Missing files par build fail nahi hoga
 WHITENOISE_USE_FINDERS = True       # Static files ko dhoondne mein help karega
-# Modern Django 4.2/6.0 compatibility
+
 STORAGES = {
     "default": {
-        "BACKEND": DEFAULT_FILE_STORAGE,
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
-        "BACKEND": STATICFILES_STORAGE,
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
     },
 }
 

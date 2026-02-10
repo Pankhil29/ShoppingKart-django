@@ -86,21 +86,22 @@
             height: 60vh;
             justify-content: center !important;
             /* Mobile par text center */
-            padding: 20px;
-            background-position: center;
+            padding: 0px !important;
+            background-position: center center;
             /* Image center focus */
         }
 
         .hero::before {
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             /* Mobile par image ke upar dark layer taaki white text dikhe */
         }
 
         .hero-content {
             text-align: center;
             /* background: rgba(255, 255, 255, 0.9); */
-            padding: 25px 15px;
-            max-width: 100%;
+            padding: 20px;
+            max-width: 90%;
+            margin: 0 auto;
             backdrop-filter: blur(1px);
         }
 
@@ -117,12 +118,17 @@
 
     @media (max-width: 578px) {
 
+        .hero {
+            height: 50vh;
+            /* Chote phones par height thodi aur kam */
+        }
+
         .hero h1 {
             font-size: 1.3rem;
         }
 
         .hero p {
-            font-size: 0.5;
+            font-size: 0.9rem;
             margin-bottom: 10px;
         }
 
@@ -217,7 +223,7 @@
     }
 </style>
 
-<section class="hero d-flex justify-content-end align-items-center">
+<section class="hero d-flex justify-content-md-end justify-content-center align-items-center">
     <div class="hero-content">
         <h1>New Season Arrivals</h1>
         <p>Best quality products at unbeatable prices</p>
